@@ -37,7 +37,7 @@ tasks.jar {
 }
 
 tasks.war {
-    from("/src/webapp") {
+    from("src/webapp") {
         into("")
     }
 

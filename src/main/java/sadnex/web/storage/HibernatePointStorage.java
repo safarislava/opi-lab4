@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import sadnex.web.entity.Point;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class HibernatePointStorage implements PointStorage {
     }
 
     @Override
+    @Transactional
     public void addPoint(Point point) {
         entityManager.persist(point);
     }
