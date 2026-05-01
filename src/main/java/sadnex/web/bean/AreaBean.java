@@ -23,6 +23,11 @@ public class AreaBean implements Serializable {
     private static final long serialVersionUID = 52L;
 
     @Inject
+    private PointCounter pointCounter;
+    @Inject
+    private PointInterval pointInterval;
+
+    @Inject
     private PointStorage pointStorage;
     @Inject
     private HitChecker hitChecker;
@@ -59,6 +64,9 @@ public class AreaBean implements Serializable {
         Point point = new Point(x, y, r, LocalDateTime.now());
         point.setHit(hitChecker.checkHit(point));
         pointStorage.addPoint(point);
+
+        pointCounter.addPoint(point);
+        pointInterval.addInterval();
     }
 
     public List<Point> getPoints() {
