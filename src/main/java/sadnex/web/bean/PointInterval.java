@@ -5,33 +5,29 @@ import jakarta.inject.Named;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Named
 @ApplicationScoped
 public class PointInterval implements PointIntervalMBean {
+    private LocalDateTime firstTime;
     private LocalDateTime lastTime;
-    private final List<Duration> intervals = new CopyOnWriteArrayList<>();
+    private long count = 0;
 
     @Override
     public void addInterval() {
-        if (lastTime == null) {
-            lastTime = LocalDateTime.now();
-            return;
+        LocalDateTime now = LocalDateTime.now();
+        if (firstTime == null) {
+            firstTime = now;
         }
-
-        Duration duration = Duration.between(lastTime, LocalDateTime.now());
-        intervals.add(duration);
-        lastTime = LocalDateTime.now();
+        lastTime = now;
+        count++;
     }
 
     @Override
     public Duration getAverageInterval() {
-        Duration alltime = Duration.ZERO;
-        for (Duration duration : intervals) {
-            alltime = duration.plus(duration);
+        if (count == 0) {
+            return Duration.ZERO;
         }
-        return alltime.dividedBy(intervals.size());
+        return Duration.between(firstTime, lastTime);
     }
 }

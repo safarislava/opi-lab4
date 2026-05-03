@@ -3,6 +3,7 @@ package sadnex.web.bean;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import sadnex.web.annotation.Profiler;
 import sadnex.web.entity.Point;
 import sadnex.web.storage.PointStorage;
 import sadnex.web.util.HitChecker;
@@ -21,11 +22,6 @@ import java.util.List;
 public class AreaBean implements Serializable {
     @Serial
     private static final long serialVersionUID = 52L;
-
-    @Inject
-    private PointCounter pointCounter;
-    @Inject
-    private PointInterval pointInterval;
 
     @Inject
     private PointStorage pointStorage;
@@ -60,13 +56,12 @@ public class AreaBean implements Serializable {
         this.r = r;
     }
 
-    public void createPoint() {
+    @Profiler
+    public Point createPoint() {
         Point point = new Point(x, y, r, LocalDateTime.now());
         point.setHit(hitChecker.checkHit(point));
         pointStorage.addPoint(point);
-
-        pointCounter.addPoint(point);
-        pointInterval.addInterval();
+        return point;
     }
 
     public List<Point> getPoints() {

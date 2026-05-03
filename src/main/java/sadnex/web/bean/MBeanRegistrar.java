@@ -20,28 +20,28 @@ public class MBeanRegistrar implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         try {
             pointCounterName = new ObjectName("sadnex.web.bean:type=PointCounter");
-            if (!mbs.isRegistered(pointCounterName)) {
-                mbs.registerMBean(pointCounter, pointCounterName);
+            if (!mBeanServer.isRegistered(pointCounterName)) {
+                mBeanServer.registerMBean(pointCounter, pointCounterName);
             }
         } catch (Exception ignored) {}
 
         try {
             pointIntervalName = new ObjectName("sadnex.web.bean:type=PointInterval");
-            if (!mbs.isRegistered(pointIntervalName)) {
-                mbs.registerMBean(pointInterval, pointIntervalName);
+            if (!mBeanServer.isRegistered(pointIntervalName)) {
+                mBeanServer.registerMBean(pointInterval, pointIntervalName);
             }
         } catch (Exception ignored) {}
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         try {
-            mbs.unregisterMBean(pointCounterName);
-            mbs.unregisterMBean(pointIntervalName);
+            mBeanServer.unregisterMBean(pointCounterName);
+            mBeanServer.unregisterMBean(pointIntervalName);
         } catch (Exception ignored) {}
     }
 }
