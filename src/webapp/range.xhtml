@@ -58,7 +58,7 @@
                                  oncomplete="drawGraph(); uncheckClick(); "/>
                 <p:remoteCommand name="submitClickPoint" action="#{area.createPoint}"
                                  update="hidden-points-table points-table @form"
-                                 oncomplete="drawGraph(); uncheckClick(); "/>
+                                 oncomplete="drawGraph(); uncheckClick(); " async="true"/>
             </h:form>
         </div>
 

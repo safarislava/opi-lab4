@@ -15,7 +15,6 @@ public class PointCounter extends NotificationBroadcasterSupport implements Poin
     private long pointCount = 0;
     private long hitPointCount = 0;
 
-    @Override
     public void addPoint(boolean isHit) {
         pointCount++;
         if (isHit) {
@@ -39,6 +38,9 @@ public class PointCounter extends NotificationBroadcasterSupport implements Poin
 
     @Override
     public double getHitRate() {
+        if  (pointCount == 0) {
+            return 0;
+        }
         return (double) hitPointCount / pointCount;
     }
 
