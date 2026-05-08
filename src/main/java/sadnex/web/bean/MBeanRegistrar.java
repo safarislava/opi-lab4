@@ -14,10 +14,6 @@ public class MBeanRegistrar implements ServletContextListener {
     private PointCounter pointCounter;
     private ObjectName pointCounterName;
 
-    @Inject
-    private PointInterval pointInterval;
-    private ObjectName pointIntervalName;
-
     @Override
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
@@ -27,13 +23,6 @@ public class MBeanRegistrar implements ServletContextListener {
                 mBeanServer.registerMBean(pointCounter, pointCounterName);
             }
         } catch (Exception ignored) {}
-
-        try {
-            pointIntervalName = new ObjectName("sadnex.web.bean:type=PointInterval");
-            if (!mBeanServer.isRegistered(pointIntervalName)) {
-                mBeanServer.registerMBean(pointInterval, pointIntervalName);
-            }
-        } catch (Exception ignored) {}
     }
 
     @Override
@@ -41,7 +30,6 @@ public class MBeanRegistrar implements ServletContextListener {
         MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
         try {
             mBeanServer.unregisterMBean(pointCounterName);
-            mBeanServer.unregisterMBean(pointIntervalName);
         } catch (Exception ignored) {}
     }
 }

@@ -12,16 +12,19 @@ import javax.management.ObjectName;
 @ApplicationScoped
 public class PointCounter extends NotificationBroadcasterSupport implements PointCounterMBean {
     private long sequenceNumber = 1;
-    private boolean isLastPointHit;
     private long pointCount = 0;
+    private long hitPointCount = 0;
 
     @Override
     public void addPoint(boolean isHit) {
-        if (pointCount > 1 && !isLastPointHit && !isHit) {
+        pointCount++;
+        if (isHit) {
+            hitPointCount++;
+        }
+
+        if (pointCount % 15 == 0) {
             sendNotification();
         }
-        isLastPointHit = isHit;
-        pointCount++;
     }
 
     @Override
@@ -29,13 +32,23 @@ public class PointCounter extends NotificationBroadcasterSupport implements Poin
         return pointCount;
     }
 
+    @Override
+    public long getHitPointCount() {
+        return hitPointCount;
+    }
+
+    @Override
+    public double getHitRate() {
+        return (double) hitPointCount / pointCount;
+    }
+
     private void sendNotification() {
         try {
             Notification notification = new Notification(
-                    "point.miss.double",
+                    "point.count.multiple.15",
                     new ObjectName("sadnex.web.bean:type=PointCounter"),
-                    sequenceNumber++, System.currentTimeMillis(),
-                    "Обнаружено два промаха подряд!"
+                    sequenceNumber++,
+                    System.currentTimeMillis()
             );
             super.sendNotification(notification);
         } catch (MalformedObjectNameException e) {
